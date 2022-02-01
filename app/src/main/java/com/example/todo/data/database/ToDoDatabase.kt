@@ -8,6 +8,6 @@ import com.example.todo.data.ToDoDao
 @Database(entities = [ToDo::class], version = 1, exportSchema = false)
 abstract class ToDoDatabase : RoomDatabase() {
 
-    abstract val dao: ToDoDao
+    abstract fun getDao(): ToDoDao
 
 }
