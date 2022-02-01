@@ -1,4 +1,4 @@
-package com.example.todo.data
+package com.example.todo.data.model
 
 import androidx.compose.ui.graphics.Color
 import androidx.room.Entity
