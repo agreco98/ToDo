@@ -3,8 +3,9 @@ package com.example.todo.repository
 import com.example.todo.data.ToDoDao
 import com.example.todo.data.model.ToDo
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
-class ToDoRepository(private val dao: ToDoDao) {
+class ToDoRepository @Inject constructor(private val dao: ToDoDao) {
 
     fun getAllToDo(): Flow<List<ToDo>> = dao.getAllToDo()
 
