@@ -11,6 +11,8 @@ class ToDoRepository @Inject constructor(private val dao: ToDoDao) {
 
     suspend fun getToDo(id: Long): ToDo = dao.getToDo(id)
 
+    suspend fun updateIsFinished(isFinished: Boolean, id: Long) = dao.updateIsFinished(isFinished, id)
+
     suspend fun insertToDo(toDo: ToDo) = dao.insertToDo(toDo)
 
     suspend fun deleteToDo(toDo: ToDo) = dao.deleteToDo(toDo)
