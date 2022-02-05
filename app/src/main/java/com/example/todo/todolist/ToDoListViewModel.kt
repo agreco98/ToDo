@@ -10,13 +10,13 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ToDoViewModel @Inject constructor(private val toDoRepository: ToDoRepository) : ViewModel() {
+class ToDoListViewModel @Inject constructor(private val toDoRepository: ToDoRepository) : ViewModel() {
 
     private val _state = MutableStateFlow(ToDoListState())
     val state: StateFlow<ToDoListState>
     get () = _state
 
-    private val allToDo = toDoRepository.getAllToDo()
+    val allToDo = toDoRepository.getAllToDo()
     private val isFinished = MutableStateFlow(_state.value.isFinished)
 
     init {
@@ -42,6 +42,12 @@ class ToDoViewModel @Inject constructor(private val toDoRepository: ToDoReposito
     fun deleteToDo(toDo: ToDo) {
         viewModelScope.launch {
             toDoRepository.deleteToDo(toDo)
+        }
+    }
+
+    fun getToDo(id: Long) {
+        viewModelScope.launch {
+            toDoRepository.getToDo(id)
         }
     }
 
