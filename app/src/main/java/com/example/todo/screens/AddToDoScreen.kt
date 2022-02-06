@@ -21,17 +21,20 @@ fun AddToDoScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Add To Do") },
+                title = {},
+                backgroundColor = MaterialTheme.colors.background,
+                elevation = 0.dp,
                 navigationIcon = {
                    Icon(
                        imageVector = Icons.Default.ArrowBack,
                        contentDescription = "Back",
+                       tint = MaterialTheme.colors.onBackground,
                        modifier = Modifier
                            .clip(CircleShape)
                            .clickable {
                                onNavigation()
                            }
-                           .padding(12.dp)
+                           .padding(top = 16.dp, bottom = 12.dp, start = 12.dp, end = 12.dp)
                            .size(24.dp))
                 }
             )
