@@ -1,9 +1,9 @@
 package com.example.todo.addtodo
 
+import androidx.lifecycle.SavedStateHandle
 import kotlinx.coroutines.flow.*
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.todo.addtodo.AddToDoState
 import com.example.todo.data.model.ToDo
 import com.example.todo.repository.ToDoRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -14,7 +14,10 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class AddToDoViewModel @Inject constructor(private val toDoRepository: ToDoRepository) : ViewModel() {
+class AddToDoViewModel @Inject constructor(
+    private val toDoRepository: ToDoRepository,
+    private val savedStateHandle: SavedStateHandle
+    ) : ViewModel() {
 
     private val _state = MutableStateFlow(AddToDoState())
     val state: StateFlow<AddToDoState>
@@ -22,37 +25,31 @@ class AddToDoViewModel @Inject constructor(private val toDoRepository: ToDoRepos
 
     private val title = MutableStateFlow("")
     private val description = MutableStateFlow("")
-    private val id = MutableStateFlow(-1L)
+
+    private var currentId: Long = -1L
 
     init {
-        loadAddToDo()
-    }
-
-    init {
-        idSelect()
-    }
-
-    private fun loadAddToDo() {
         viewModelScope.launch {
-            combine(title, description, id) { title, description, id ->
-                AddToDoState(title, description, id)
+            combine(title, description) { text, description ->
+                AddToDoState(text, description)
             }.collect {
                 _state.value = it
             }
         }
     }
 
+    init {
+        idSelect()
+    }
+
     private fun idSelect() {
-        viewModelScope.launch {
-            toDoRepository.getAllToDo().collect { toDo ->
-                toDo.find {
-                    it.id == id.value
-                }.also {
-                    id.value = it?.id ?: -1L
-                    if(id.value != -1L) {
-                        title.value = it?.title ?: ""
-                        description.value = it?.description ?: ""
-                        id.value = it?.id ?: -1L
+        savedStateHandle.get<Long>("id")?.let { id ->
+            if(id != -1L) {
+                viewModelScope.launch {
+                    toDoRepository.getToDo(id).also { toDo ->
+                        currentId = toDo.id
+                        title.value = toDo.title
+                        description.value = toDo.description
                     }
                 }
             }
@@ -70,7 +67,7 @@ class AddToDoViewModel @Inject constructor(private val toDoRepository: ToDoRepos
     }
 
     fun onDescriptionChange(newDescription: String) {
-        title.value = newDescription
+        description.value = newDescription
     }
 
 }

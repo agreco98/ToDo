@@ -5,10 +5,15 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavHostController
+import com.example.todo.data.model.ToDo
 import com.example.todo.todolist.ToDoList
+import com.example.todo.util.Screen
 
 @Composable
-fun HomeScreen() {
+fun ToDoListScreen(
+    navController: NavHostController
+) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -16,7 +21,7 @@ fun HomeScreen() {
             )
         },
         floatingActionButton = {
-            FloatingActionButton(onClick = {}) {
+            FloatingActionButton(onClick = {  navController.navigate(Screen.AddToDoScreen.route)  }) {
                 Icon(
                     imageVector = Icons.Default.Add,
                     contentDescription = "Add task"
@@ -26,10 +31,4 @@ fun HomeScreen() {
     ) {
         ToDoList()
     }
-}
-
-@Preview
-@Composable
-fun PreviewHomeScreen() {
-    HomeScreen()
 }

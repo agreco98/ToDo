@@ -1,5 +1,6 @@
 package com.example.todo.todolist
 
+import android.graphics.drawable.Icon
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.calculateTargetValue
 import androidx.compose.animation.splineBasedDecay
@@ -7,44 +8,43 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.gestures.horizontalDrag
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Card
-import androidx.compose.material.Checkbox
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.pointer.consumePositionChange
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.input.pointer.positionChange
 import androidx.compose.ui.input.pointer.util.VelocityTracker
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.example.todo.data.model.ToDo
+import com.example.todo.util.Screen
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlin.math.absoluteValue
 import kotlin.math.roundToInt
 
 @Composable
-fun ToDo(
+fun ToDoItem(
     toDo: ToDo,
     onDelete: (ToDo) -> Unit,
     onChecked: (Boolean) -> Unit,
-    onNavigation: (ToDo) -> Unit,
     modifier: Modifier= Modifier
     ) {
     Card(
         backgroundColor = MaterialTheme.colors.primary,
         elevation = 0.dp,
         modifier = modifier
-            .padding(16.dp)
-            .swipeToDismiss { onDelete(toDo) }
-            .clickable {
-                onNavigation(toDo)
-            }
+            .padding(horizontal = 16.dp, vertical = 8.dp)
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -67,10 +67,22 @@ fun ToDo(
                     maxLines = 2
                 )
             }
-                Checkbox(
-                    checked = toDo.isFinished,
-                    onCheckedChange = {  onChecked(it)  }
-                )
+            Checkbox(
+                checked = toDo.isFinished,
+                onCheckedChange = {  onChecked(it)  }
+            )
+            Spacer(Modifier.width(16.dp))
+            Icon(
+                imageVector = Icons.Default.Delete,
+                contentDescription = "Delete",
+                modifier = Modifier
+                    .clip(CircleShape)
+                    .clickable {
+                        onDelete(toDo)
+                    }
+                    .padding(12.dp)
+                    .size(24.dp)
+            )
         }
     }
 }

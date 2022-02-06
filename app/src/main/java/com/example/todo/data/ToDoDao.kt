@@ -12,10 +12,10 @@ interface ToDoDao {
     @Query("SELECT * FROM todo WHERE :id")
     suspend fun getToDo(id: Long): ToDo
 
-    @Query("UPDATE todo SET isFinished = :isFinished WHERE :id")
+    @Query("UPDATE todo SET isFinished = :isFinished WHERE id = :id")
     suspend fun updateIsFinished(isFinished: Boolean, id: Long)
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertToDo(toDo : ToDo)
 
     @Delete

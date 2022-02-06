@@ -6,6 +6,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
+import com.example.todo.data.model.ToDo
+import com.example.todo.util.Screen
 
 @Composable
 fun ToDoList(
@@ -15,11 +18,10 @@ fun ToDoList(
 
     LazyColumn() {
         items(state.allToDo) { toDo ->
-            ToDo(
+            ToDoItem(
                 toDo = toDo,
                 onDelete = {  viewModel.deleteToDo(it) },
-                onChecked = { viewModel.updateIsFinished(it, toDo.id)},
-                onNavigation ={ viewModel.getToDo(toDo.id) }
+                onChecked = { viewModel.updateIsFinished(it, toDo.id)}
             )
         }
     }
